@@ -1,7 +1,7 @@
-version: 2b
+version: 2
 
 sources:
-  - name: RAW
+  - name: raw
     database: RAW
     schema: TPCH_SF001
     loader: daily_load_task
@@ -65,7 +65,7 @@ sources:
             - name: R_NAME
             - name: R_COMMENT
 
-     - name: supplier
+      - name: supplier
         identifier: SUPPLIER
         columns:
             - name: S_SUPPKEY
