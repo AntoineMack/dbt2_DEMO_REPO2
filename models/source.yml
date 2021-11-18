@@ -1,0 +1,80 @@
+version: 2
+
+sources:
+  - name: raw
+    database: RAW
+    schema: TPCH_SF001
+    loader: daily_load_task
+    loaded_at_field: _loaded_at
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    tables:
+      - name: customer
+        identifier: CUSTOMER
+        columns:
+            - name: C_CSTKEY
+              tests:
+                - unique
+                - not_null
+            - name: C_NAME
+            - name: C_ADDRESS
+            - name: C_NATIONKEY
+            - name: C_PHONE
+            - name: C_ACCTBAL
+            - name: C_MKTSEGMENT
+            - name: C_COMMENT
+
+      - name: nation
+        identifier: NATION
+        columns:
+            - name: N_NATIONKEY
+              tests:
+                - unique
+                - not_null
+            - name: N_REGIONKEY
+              tests:
+                - relationships:
+                    to: source('raw','region')
+                    field: R_REGIONKEY
+            - name: N_NAME
+
+      - name: partsupp
+        identifier: PARTSUPP
+        columns:
+            - name: PS_PARTKEY
+              tests:
+                - unique
+                - not_null
+            - name: PS_SUPPKEY
+              tests:
+                - relationships:
+                    to: source('raw','supplier')
+                    field: S_SUPPKEY
+            - name: PS_AVAILQTY
+            - name: PS_SUPPLYCOST
+            - name: PS_COMMENT
+         
+      - name: region
+        identifier: REGION
+        columns:
+            - name: R_REGIONKEY
+              tests:
+                - unique
+                - not_null
+            - name: R_NAME
+            - name: R_COMMENT
+
+      - name: supplier
+        identifier: SUPPLIER
+        columns:
+            - name: S_SUPPKEY
+              tests:
+                - unique
+                - not_null
+            - name: S_NAME
+            - name: S_ADDRESS
+            - name: S_NATIONKEY
+            - name: S_PHONE
+            - name: S_ACCTBAL
+            - name: S_COMMENT
