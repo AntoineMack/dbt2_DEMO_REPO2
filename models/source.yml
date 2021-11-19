@@ -44,7 +44,6 @@ sources:
         columns:
             - name: PS_PARTKEY
               tests:
-                - unique
                 - not_null
             - name: PS_SUPPKEY
               tests:
